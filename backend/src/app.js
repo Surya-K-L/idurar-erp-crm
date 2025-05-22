@@ -1,5 +1,4 @@
 const express = require('express');
-
 const cors = require('cors');
 const compression = require('compression');
 
@@ -15,6 +14,7 @@ const errorHandlers = require('./handlers/errorHandlers');
 const erpApiRouter = require('./routes/appRoutes/appApi');
 
 const fileUpload = require('express-fileupload');
+const queryManagementRouter = require('./routes/queryManagementRouter');
 // create our Express app
 const app = express();
 
@@ -41,12 +41,15 @@ app.use('/api', adminAuth.isValidAuthToken, coreApiRouter);
 app.use('/api', adminAuth.isValidAuthToken, erpApiRouter);
 app.use('/download', coreDownloadRouter);
 app.use('/public', corePublicRouter);
+app.use('/test', queryManagementRouter);
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);
 
 // production error handler
 app.use(errorHandlers.productionErrors);
+// app.use('/api', adminAuth.isValidAuthToken, queryManagementRouter);
+
 
 // done! we export it so we can start the site in start.js
 module.exports = app;
